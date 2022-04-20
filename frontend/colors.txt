@@ -1,0 +1,5 @@
+A = #B3D5FF
+B = #9FCFE3
+C = #BCF8FA
+D = #9FE3D2
+E = #B3FFD7
