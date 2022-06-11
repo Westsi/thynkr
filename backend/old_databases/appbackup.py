@@ -20,6 +20,7 @@ from datetime import datetime
 from werkzeug.utils import secure_filename
 import os
 import magic
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -30,6 +31,7 @@ ma = Marshmallow(app)
 api = Api(app)
 # image extensions
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+FLASHCARDS_FOLDER = 'flashcards/'
 
 
 # db models
@@ -75,9 +77,11 @@ class Notif(db.Model):
     notif_id = db.Column(db.Integer, primary_key=True)
     user_to_send_to = db.Column(db.String(50))
     date_time = db.Column(db.DateTime)
-    content = db.Column(db.String(255))
-    user_to_link_to = db.Column(db.String(255))
-    post_to_link_to = db.Column(db.String(255))
+    user_to_link = db.Column(db.String(50))
+    post_to_link = db.Column(db.String(50))
+    notif_type = db.Column(db.String(50))  # notif_type can be like or comment right now
+
+    # any value can be entered but frontend only parses like and comment
 
     def __repr__(self):
         return '<Notifs %s>' % self.content
@@ -89,6 +93,7 @@ class PostSchema(ma.Schema):
     class Meta:
         fields = ("post_id", "title", "content", "author", "date_time", "comment_number")
         model = Post
+
 
 # these post_schema and posts_schema and then users etc is to return the data from db in crud calls
 # i.e. the PostListResource.get() return
@@ -121,7 +126,7 @@ comments_schema = CommentSchema(many=True)
 # notifications
 class NotifSchema(ma.Schema):
     class Meta:
-        fields = ("notif_id", "user_to_send_to", "content", "date_time", "user_to_link_to", "post_to_link_to")
+        fields = ("notif_id", "user_to_send_to", "notif_type", "date_time", "user_to_link", "post_to_link")
         model = Notif
 
 
@@ -174,6 +179,7 @@ class PostResource(Resource):
     def delete(self, post_id):
         post = Post.query.get_or_404(post_id)
         db.session.delete(post)
+        # to add: get comments, filter for on_post_id being id of post deleting and delete them too
         db.session.commit()
         return '', 204
 
@@ -325,11 +331,11 @@ class NotifListResource(Resource):
 
     def post(self):
         new_notif = Notif(
-            content=request.json['content'],
+            notif_type=request.json['notif_type'],
             user_to_send_to=request.json['user_to_send_to'],
-            user_to_link_to=request.json['user_link'],
-            post_to_link_to=request.json['post_link'],
             date_time=datetime.now(),
+            post_to_link=request.json['post_link'],
+            user_to_link=request.json['user_link']
         )
 
         db.session.add(new_notif)
@@ -365,6 +371,33 @@ class GetNotifResource(Resource):
 
 
 api.add_resource(GetNotifResource, '/notifs/<string:user_name>')
+
+
+class FlashCards(Resource):
+    def get(self, identifier):
+        file_path = FLASHCARDS_FOLDER + str(identifier) + '.json'
+        f = open(file_path, 'r')
+        data = f.read()
+        data = json.loads(data)
+        return data
+
+
+api.add_resource(FlashCards, '/flashcards/<int:identifier>')
+
+
+class FlashCardsAll(Resource):
+    def get(self):
+        number_of_files = len(os.listdir(FLASHCARDS_FOLDER))
+        data = []
+        for i in range(number_of_files):
+            file_path = FLASHCARDS_FOLDER + str(i+1) + '.json'
+            f = open(file_path, 'r')
+            file = f.read()
+            data.append(json.loads(file))
+        return data
+
+
+api.add_resource(FlashCardsAll, '/flashcards')
 
 
 @app.after_request
