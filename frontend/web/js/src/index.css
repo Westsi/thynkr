@@ -1,0 +1,10 @@
+:root {
+	--clr-neutral-100: #ffffff;
+	--clr-accent-300: #ffc107;
+  --clr-accent-400: #ff9800;
+	--clr-neutral-900: #000000;
+}
+
+.container {
+	text-align: center;
+}

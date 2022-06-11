@@ -1,7 +1,8 @@
 {
-  "public": false,
+  "public": true,
   "title": "About Thynkr",
   "owner": "user1",
+  "id": "1",
   "cards": [
     {
       "title": "what is thynkr",

@@ -1,0 +1,20 @@
+{
+  "public": true,
+  "title": "About Thynkr2",
+  "owner": "user2",
+  "id": "2",
+  "cards": [
+    {
+      "title": "what is thynkr",
+      "content": "an elearning software designed by students for students"
+    },
+    {
+      "title": "what is the thynkr feed",
+      "content": "the hub for asking for help with thynkr or your work"
+    },
+    {
+      "title": "what is the flashcards zone",
+      "content": "where you are right now! this is the learning hub"
+    }
+  ]
+}
