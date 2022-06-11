@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './theme.css';
 
-import {Homepage, Aboutpage, Signup, Login, Feed, NewPost, Profile, Post, Search, EditProfile, Flashcards, FcHome} from './App'
+import {Homepage, Aboutpage, Signup, Login, Feed, NewPost, Profile, Post, Search, EditProfile, Flashcards, FcHome, Planner} from './App'
 
 ReactDOM.render(
     <BrowserRouter>
@@ -22,6 +22,7 @@ ReactDOM.render(
             <Route path="/editprofile" element={<EditProfile />} />
             <Route path="/flashcards/:id" element={<Flashcards />} />
             <Route path="/flashcards" element={<FcHome />} />
+            <Route path="/planner" element={<Planner />} />
         </Routes>
     </BrowserRouter>,
     document.getElementById('root')

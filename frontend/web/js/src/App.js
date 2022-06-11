@@ -11,5 +11,6 @@ import Search from './Search';
 import EditProfile from './EditProfile';
 import Flashcards from './Flashcards';
 import FcHome from './FlashcardHome';
+import Planner from './Planner';
 
-export { Homepage, Aboutpage, Signup, Login, Header, Feed, NewPost, Profile, Post, Search, EditProfile, Flashcards, FcHome };
+export { Homepage, Aboutpage, Signup, Login, Header, Feed, NewPost, Profile, Post, Search, EditProfile, Flashcards, FcHome, Planner };

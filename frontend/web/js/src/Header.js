@@ -10,7 +10,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import { Card } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignOutAlt, faHouse, faMessage, faBell, faBoltLightning } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSignOutAlt, faHouse, faMessage, faBell, faBoltLightning, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { getData, deleteData, postData } from './APIREQ';
 
 const checkUserExistence = () => {
@@ -109,6 +109,7 @@ const Header = () => {
                             <Nav.Link href="/login"><FontAwesomeIcon icon={faUser} /> Login</Nav.Link>
                             <Nav.Link href="/signup"><FontAwesomeIcon icon={faUser} /> Signup</Nav.Link>
                             <Nav.Link href="/flashcards"><FontAwesomeIcon icon={faBoltLightning} /> Flashcards</Nav.Link>
+                            <Nav.Link href="/planner"><FontAwesomeIcon icon={faCalendarCheck} /> Planner</Nav.Link>
                         </Nav>
                         </Navbar.Collapse>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
