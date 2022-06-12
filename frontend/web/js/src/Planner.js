@@ -85,21 +85,23 @@ const Planner = () => {
                     </Button>
                     <Button variant="primary" onClick={() => {
                         
-                        const startDate = new Date();
+                        var startDate = new Date();
                         startDate.setMinutes(eventStartTime.split(':')[1]);
                         startDate.setHours(eventStartTime.split(':')[0]);
                         startDate.setDate(eventStartDate.split('-')[2]);
                         startDate.setMonth(eventStartDate.split('-')[1] - 1);
                         startDate.setFullYear(eventStartDate.split('-')[0]);
                         startDate.setSeconds(0);
+                        startDate = startDate.getTime();
 
-                        const endDate = new Date();
+                        var endDate = new Date();
                         endDate.setMinutes(eventEndTime.split(':')[1]);
                         endDate.setHours(eventEndTime.split(':')[0]);
                         endDate.setDate(eventEndDate.split('-')[2]);
                         endDate.setMonth(eventEndDate.split('-')[1] - 1);
                         endDate.setFullYear(eventEndDate.split('-')[0]);
                         endDate.setSeconds(0);
+                        endDate = endDate.getTime();
 
                         console.log(startDate);
                         console.log(endDate);

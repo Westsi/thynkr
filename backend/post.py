@@ -1,5 +1,5 @@
 from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, abort
 from datetime import datetime
 from db import db, ma
 import comment
@@ -65,23 +65,30 @@ class PostResource(Resource):
 
     def patch(self, post_id):
         post = Post.query.get_or_404(post_id)
+        key_info = login_verifier_keys.Key.query.get_or_404(request.json['key'])
+        key_info = login_verifier_keys.key_schema.dump(key_info)
+        if key_info['user'] == post_schema.dump(post)['author']:
+            if 'title' in request.json:
+                post.title = request.json['title']
+            if 'content' in request.json:
+                post.content = request.json['content']
 
-        if 'title' in request.json:
-            post.title = request.json['title']
-        if 'content' in request.json:
-            post.content = request.json['content']
-
-        db.session.commit()
-        return post_schema.dump(post)
+            db.session.commit()
+            return post_schema.dump(post)
+        abort(401)
 
     def delete(self, post_id):
         post = Post.query.get_or_404(post_id)
-        db.session.delete(post)
-        # i got no idea if this chunk works- should test it
-        comments = comment.Comment.query.all()
-        for icomment in comments:
-            if icomment["on_post_id"] == post_id:
-                db.session.delete(comment.Comment.get_or_404(icomment["comment_id"]))
-        # up to here
-        db.session.commit()
-        return '', 204
+        key_info = login_verifier_keys.Key.query.get_or_404(request.json['key'])
+        key_info = login_verifier_keys.key_schema.dump(key_info)
+        if key_info['user'] == post_schema.dump(post)['author']:
+            db.session.delete(post)
+            # i got no idea if this chunk works- should test it
+            comments = comment.Comment.query.all()
+            for icomment in comments:
+                if icomment["on_post_id"] == post_id:
+                    db.session.delete(comment.Comment.get_or_404(icomment["comment_id"]))
+            # up to here
+            db.session.commit()
+            return '', 204
+        abort(401)
