@@ -7,6 +7,95 @@ import Form from 'react-bootstrap/Form';
 import { checkUserExistence } from './Header';
 import { getData } from './APIREQ';
 import Spinner from 'react-bootstrap/Spinner';
+import { Table } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+
+const MonthView = () => {
+
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
+
+    const globalDate = new Date('August 20, 2022 00:20:18');
+    // ^ not crashing but not changing month
+    const [month, setMonth] = useState(globalDate.getMonth());
+    const [year, setYear] = useState(globalDate.getFullYear());
+    const [day, setDay] = useState(globalDate.getDate());
+    const [dayOfWeek, setDayOfWeek] = useState(globalDate.getDay());
+    const [days, setDays] = useState([]);
+    const [events, setEvents] = useState([]);
+    const firstDayOfMonthDay = daysOfWeek[new Date(year, month, 1).getDay()];
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+    const lastDayOfMonth = new Date(year, month + 1, 0).getDay();
+    const lastDayOfMonthNumber = new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonthNumber = new Date(year, month, 1).getDate();
+
+    const set_days = () => {
+        let days = [];
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            days.push(null);
+        }
+        for (let i = 1; i <= lastDayOfMonthNumber; i++) {
+            days.push(i);
+        }
+        for (let i = 0; i < (6 - lastDayOfMonth); i++) {
+            days.push(i+1);
+        }
+        setDays(days);
+        console.log(days)
+    }
+        
+
+
+    useEffect(() => {
+        set_days();
+    }, []);
+
+    return(
+        <>
+        <Table striped bordered hover size="sm" variant="light">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th><Button variant="info" onClick={() => {globalDate.setMonth(globalDate.getMonth() -1)}}><FontAwesomeIcon icon={faAngleLeft} /></Button></th>
+                    <th>{months[month]}</th>
+                    <th><Button variant="info" onClick={() => {globalDate.setMonth(globalDate.getMonth() + 1)}}><FontAwesomeIcon icon={faAngleRight} /></Button></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {daysOfWeek.map((day, index) => {
+                        return <td key={index}>{day}</td>
+                    }
+                    )}
+                </tr>
+            
+                {days.map((day, index) => {
+                    if (index % 7 === 5) {
+                        // MAKE CLICK ON CELL RETURN VAL and create new event on that day
+                        // also week view and day view
+                        return <tr key={index}> {days.slice(index - 5, index + 2).map((day, index) => {
+                            return <td key={index}>{day}</td>
+                        }
+                        )}
+                        </tr>
+                    }
+                   
+                }
+                )}
+
+            </tbody>
+        </Table>
+        </>
+    )
+}
+
+
+
 
 const Planner = () => {
     const [events, setEvents] = useState([]);
@@ -135,8 +224,8 @@ const Planner = () => {
         <br />
         <br />
         <Button variant="primary" onClick={() => {setShowCreator(!showCreator)}}>Create an Event</Button>
-            <h1>yayAYyYyYY</h1>
         </div>
+        <MonthView/>
         </>
     )
 };
