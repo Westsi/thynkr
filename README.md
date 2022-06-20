@@ -81,6 +81,7 @@
 ## About The Project
 
 This is a learning software that is being developed by Westsi. It aims to help you with planning study, taking and storing notes, and practicing subjects with flashcards. It also has an inbuilt forum for users to find help.
+Find line counts [here](https://line-count.herokuapp.com/westsi/thynkr)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
