@@ -12,104 +12,113 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
 const MonthView = () => {
-
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    ];
     const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
 
-    const globalDate = new Date();
-    // ^ switches between two months. strange behaviour. fix?
-    // date does not appear to actially change.
-    const [month, setMonth] = useState(globalDate.getMonth());
-    const [year, setYear] = useState(globalDate.getFullYear());
-    const [day, setDay] = useState(globalDate.getDate());
-    const [dayOfWeek, setDayOfWeek] = useState(globalDate.getDay());
-    const [days, setDays] = useState([]);
     const [events, setEvents] = useState([]);
-    const [firstDayOfMonthDay, setFirstDayOfMonthDay] = useState(daysOfWeek[new Date(year, month, 1).getDay()]);
-    const [firstDayOfMonth, setFirstDayOfMonth] = useState(new Date(year, month, 1).getDay());
-    const [lastDayOfMonth, setLastDayOfMonth] = useState(new Date(year, month + 1, 0).getDay());
-    const [lastDayOfMonthNumber, setLastDayOfMonthNumber] = useState(new Date(year, month + 1, 0).getDate());
-    const [firstDayOfMonthNumber, setFirstDayOfMonthNumber] = useState(new Date(year, month, 1).getDate());
-
-    const updateStates = () => {
-        console.log("gdate: " + globalDate);
-        setMonth(globalDate.getMonth());
-        setYear(globalDate.getFullYear());
-        setDay(globalDate.getDate());
-        setDayOfWeek(globalDate.getDay());
-        setFirstDayOfMonthDay(daysOfWeek[new Date(year, month, 1).getDay()]);
-        setFirstDayOfMonth(new Date(year, month, 1).getDay());
-        setLastDayOfMonth(new Date(year, month + 1, 0).getDay());
-        setLastDayOfMonthNumber(new Date(year, month + 1, 0).getDate());
-        setFirstDayOfMonthNumber(new Date(year, month, 1).getDate());
-        set_days();
-    }
-
-    const set_days = () => {
-        let days = [];
+    const [globalDate, setGlobalDate] = useState(new Date());
+    const month = globalDate.getMonth();
+    const year = globalDate.getFullYear();
+    const day = globalDate.getDate();
+    const dayOfWeek = globalDate.getDay();
+    const firstDayOfMonthDay = daysOfWeek[new Date(year, month, 1).getDay()];
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+    const lastDayOfMonth = new Date(year, month + 1, 0).getDay();
+    const lastDayOfMonthNumber = new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonthNumber = new Date(year, month, 1).getDate();
+    const days = (() => {
+        let daysArr = [];
         for (let i = 0; i < firstDayOfMonth; i++) {
-            days.push(null);
+            daysArr.push(null);
         }
         for (let i = 1; i <= lastDayOfMonthNumber; i++) {
-            days.push(i);
+            daysArr.push(i);
         }
-        for (let i = 0; i < (6 - lastDayOfMonth); i++) {
-            days.push(i+1);
+        for (let i = 0; i < 6 - lastDayOfMonth; i++) {
+            daysArr.push(i + 1);
         }
-        setDays(days);
-        console.log(days)
-        console.log(globalDate);
-    }
-        
+        return daysArr;
+    })();
 
-
-    useEffect(() => {
-        set_days();
-    }, []);
-
-    return(
+    return (
         <>
-        <Table striped bordered hover size="sm" variant="light">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th><Button variant="info" onClick={() => {globalDate.setMonth(globalDate.getMonth() - 1); updateStates();}}><FontAwesomeIcon icon={faAngleLeft} /></Button></th>
-                    <th>{months[month]}</th>
-                    <th><Button variant="info" onClick={() => {globalDate.setMonth(globalDate.getMonth() + 1); updateStates();}}><FontAwesomeIcon icon={faAngleRight} /></Button></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    {daysOfWeek.map((day, index) => {
-                        return <td key={index}>{day}</td>
-                    }
-                    )}
-                </tr>
-            
-                {days.map((day, index) => {
-                    if (index % 7 === 5) {
-                        // MAKE CLICK ON CELL RETURN VAL and create new event on that day
-                        // also week view and day view
-                        // use lighthouse to test and do everything possible to decrease load time
-                        return <tr key={index}> {days.slice(index - 5, index + 2).map((day, index2) => {
-                            return <td key={index2} onClick={() => {console.log(index + index2 - 5);}}>{day}</td>
-                        }
-                        )}
-                        </tr>
-                    }
-                   
-                }
-                )}
+            <Table striped bordered hover size="sm" variant="light">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            <Button
+                                variant="info"
+                                onClick={() => {
+                                    const newDate = new Date();
+                                    newDate.setMonth(globalDate.getMonth() - 1);
+                                    setGlobalDate(newDate);
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faAngleLeft} />
+                            </Button>
+                        </th>
+                        <th>{months[month]}</th>
+                        <th>
+                            <Button
+                                variant="info"
+                                onClick={() => {
+                                    const newDate = new Date();
+                                    newDate.setMonth(globalDate.getMonth() + 1);
+                                    setGlobalDate(newDate);
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faAngleRight} />
+                            </Button>
+                        </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {daysOfWeek.map((day, index) => {
+                            return <td key={index}>{day}</td>;
+                        })}
+                    </tr>
 
-            </tbody>
-        </Table>
+                    {days.map((day, index) => {
+                        if (index % 7 === 5) {
+                            // MAKE CLICK ON CELL RETURN VAL and create new event on that day
+                            // also week view and day view
+                            // use lighthouse to test and do everything possible to decrease load time
+                            return (
+                                <tr key={index}>
+                                    {" "}
+                                    {days.slice(index - 5, index + 2).map((day, index2) => {
+                                        return (
+                                            <td key={index2}>{day}</td>
+                                        );
+                                    })}
+                                </tr>
+                            );
+                        }
+                    })}
+                </tbody>
+            </Table>
         </>
-    )
-}
+    );
+};
 
 
 
@@ -125,14 +134,14 @@ const Planner = () => {
     const [eventEndDate, setEventEndDate] = useState();
     const [eventEndTime, setEventEndTime] = useState();
     const [showCreator, setShowCreator] = useState(false);
-    
+
 
 
     const navigate = useNavigate();
 
 
     useEffect(() => {
-        
+
         document.title = "Thynkr - Planner";
     }, []);
 
@@ -147,9 +156,9 @@ const Planner = () => {
 
     }
 
-    return(
+    return (
         <>
-        <Modal show={showCreator}>
+            <Modal show={showCreator}>
                 <Modal.Header>
                     <Modal.Title>Create an Event</Modal.Title>
                 </Modal.Header>
@@ -173,7 +182,7 @@ const Planner = () => {
                         </Form.Group>
                         <Form.Group controlId="formBasicText">
                             <Form.Label>Event End Date</Form.Label>
-                            <Form.Control type="date" placeholder="Enter event end date" value={eventEndDate !== null  ? eventEndDate : eventStartDate} onChange={(e) => setEventEndDate(e.target.value)} />
+                            <Form.Control type="date" placeholder="Enter event end date" value={eventEndDate !== null ? eventEndDate : eventStartDate} onChange={(e) => setEventEndDate(e.target.value)} />
                         </Form.Group>
                         <Form.Group controlId="formBasicText">
                             <Form.Label>Event End Time</Form.Label>
@@ -190,7 +199,7 @@ const Planner = () => {
                         Close
                     </Button>
                     <Button variant="primary" onClick={() => {
-                        
+
                         var startDate = new Date();
                         startDate.setMinutes(eventStartTime.split(':')[1]);
                         startDate.setHours(eventStartTime.split(':')[0]);
@@ -226,26 +235,25 @@ const Planner = () => {
                                 key: checkUserExistence().key
                             })
                         })
-                        .then(res => res.json())
-                        .then(data => {
-                            console.log(data);
-                            setShowCreator(!showCreator);
-                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log(data);
+                                setShowCreator(!showCreator);
+                            })
                     }}>
                         Create
                     </Button>
                 </Modal.Footer>
             </Modal>
-        <Header />
-        <div className="container">
-        <br />
-        <br />
-        <Button variant="primary" onClick={() => {setShowCreator(!showCreator)}}>Create an Event</Button>
-        </div>
-        <MonthView/>
+            <Header />
+            <div className="container">
+                <br />
+                <br />
+                <Button variant="primary" onClick={() => { setShowCreator(!showCreator) }}>Create an Event</Button>
+            </div>
+            <MonthView />
         </>
     )
 };
-
 
 export default Planner;
