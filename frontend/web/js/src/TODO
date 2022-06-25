@@ -1,1 +1,3 @@
 fix editProfile to work with keys
+
+also if any undefined errors, GetPosts has fixed it

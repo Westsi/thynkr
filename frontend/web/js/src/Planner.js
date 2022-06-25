@@ -116,7 +116,7 @@ const MonthView = () => {
                                     {" "}
                                     {days.slice(index - 5, index + 2).map((day, index2) => {
                                         return (
-                                            <td key={index2} onClick={() => {console.log(day)}}>{day}</td>
+                                            <td key={index2} onClick={() => {console.log(day); alert(day)}}>{day}</td>
                                         );
                                     })}
                                 </tr>

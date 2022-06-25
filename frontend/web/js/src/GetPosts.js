@@ -34,7 +34,7 @@ const Post = () => {
             .then(data => {
                 console.log(data);
                 setPostInfo(data);
-                setIsLoading(false);
+                getComments();
         });
         };
     
@@ -106,7 +106,6 @@ const Post = () => {
     
         useEffect(() => {
             makeServerRequest();
-            getComments();
             setTitle();
         }, []);
     
@@ -138,7 +137,7 @@ const Post = () => {
             <Header />
             <div className="container">
                 <br />
-            <Card style={{ width: '80rem' }}>
+            <Card style={{ width: Screen.width }}>
             <Card.Body>
                 <Card.Title>{postInfo.title}</Card.Title>
                 <Card.Text>
@@ -164,7 +163,7 @@ const Post = () => {
                 if (comment.author === cue.username) {
                     return (
                         <div>
-                            <Card style={{ width: '80rem' }}>
+                            <Card style={{ width: Screen.width }}>
                             <Card.Body>
                             <Card.Text>
                                 {comment.content}
@@ -186,7 +185,7 @@ const Post = () => {
                 else {
                     return (
                         <div>
-                            <Card style={{ width: '80rem' }}>
+                            <Card style={{ width: Screen.width }}>
                             <Card.Body>
                             <Card.Text>
                                 {comment.content}
