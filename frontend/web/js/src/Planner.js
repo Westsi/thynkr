@@ -99,7 +99,7 @@ const MonthView = () => {
 
                     {days.map((day, index) => {
                         if (index % 7 === 5) {
-                            // MAKE CLICK ON CELL RETURN VAL and create new event on that day
+                            // MAKE CLICK ON CELL RETURN VAL and create new event on that day - changes based on month - how to make work?
                             // also week view and day view
                             // use lighthouse to test and do everything possible to decrease load time
                             return (
