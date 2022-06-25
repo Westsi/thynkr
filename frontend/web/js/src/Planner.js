@@ -13,18 +13,18 @@ import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
 const MonthView = () => {
     const months = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
+        "January  ",
+        "February ",
+        "March    ",
+        "April    ",
+        "May      ",
+        "June     ",
+        "July     ",
+        "August   ",
         "September",
-        "October",
-        "November",
-        "December"
+        "October  ",
+        "November ",
+        "December "
     ];
     const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
@@ -67,19 +67,27 @@ const MonthView = () => {
                                 onClick={() => {
                                     const newDate = new Date();
                                     newDate.setMonth(globalDate.getMonth() - 1);
+                                    if (globalDate.getMonth() < 1) {
+                                        newDate.setMonth(11);
+                                        newDate.setFullYear(globalDate.getFullYear() - 1);
+                                    }
                                     setGlobalDate(newDate);
                                 }}
                             >
                                 <FontAwesomeIcon icon={faAngleLeft} />
                             </Button>
                         </th>
-                        <th>{months[month]}</th>
+                        <th width={200}>{months[month]}</th>
                         <th>
                             <Button
                                 variant="info"
                                 onClick={() => {
                                     const newDate = new Date();
                                     newDate.setMonth(globalDate.getMonth() + 1);
+                                    if (globalDate.getMonth() >= 11) {
+                                        newDate.setMonth(0);
+                                        newDate.setFullYear(globalDate.getFullYear() + 1);
+                                    }
                                     setGlobalDate(newDate);
                                 }}
                             >
@@ -99,7 +107,7 @@ const MonthView = () => {
 
                     {days.map((day, index) => {
                         if (index % 7 === 5) {
-                            // MAKE CLICK ON CELL RETURN VAL and create new event on that day - changes based on month - how to make work?
+                            // MAKE CLICK ON CELL RETURN VAL and create new event on that day - how
                             // also week view and day view
                             // use lighthouse to test and do everything possible to decrease load time
                             return (
@@ -107,7 +115,7 @@ const MonthView = () => {
                                     {" "}
                                     {days.slice(index - 5, index + 2).map((day, index2) => {
                                         return (
-                                            <td key={index2}>{day}</td>
+                                            <td key={index2} onClick={() => {console.log(day)}}>{day}</td>
                                         );
                                     })}
                                 </tr>
