@@ -66,9 +66,9 @@ const Profile = () => {
             <Header />
             <div className="container">
                 <br />
-            <Card style={{ width: '80rem' }}>
+            <Card style={{ width: Screen.width }}>
             <Card.Body>
-                <Card.Title><Image src={getImage()} height={100} roundedCircle />  {userInfo.name}</Card.Title>
+                <Card.Title><Image src={getImage()} height={100} width={100} roundedCircle />  {userInfo.name}</Card.Title>
                 <Card.Text>
                 {userInfo.about}
                 <br />
