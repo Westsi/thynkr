@@ -8,10 +8,13 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import FormControl from 'react-bootstrap/FormControl';
 import { Card } from 'react-bootstrap';
+import Image from 'react-bootstrap/Image';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt, faHouse, faMessage, faBell, faBoltLightning, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { getData, deleteData, postData } from './APIREQ';
+import logo from './images/logo.png';
+import { base_url } from './requestURL';
 
 const checkUserExistence = () => {
     const loggedInUser = localStorage.getItem("key");
@@ -45,7 +48,7 @@ const Header = () => {
         };
 
         const notifRead = (id) => {
-            deleteData('http://localhost:5000/notifs/' + id)
+            deleteData(base_url + '/notifs/' + id)
             .then(data => {
                 console.log(data);
                 window.location.reload();
@@ -54,7 +57,7 @@ const Header = () => {
 
         const getNotifications = () => {
             if (checkUserExistence().userExists === true) {
-                getData('http://localhost:5000/notifs/' + checkUserExistence().key)
+                getData(base_url + '/notifs/' + checkUserExistence().key)
             .then(data => {
                 console.log(data);
                 setNotifs(data.reverse());
@@ -73,7 +76,7 @@ const Header = () => {
                 console.log(data);
                 const expirationTime = new Date(data.expiry_date);
                 if (currentTime > expirationTime) {
-                    postData('http://localhost:5000/keys/' + checkUserExistence().key, JSON.parse(localStorage.getItem("key")))
+                    postData(base_url + '/keys/' + checkUserExistence().key, JSON.parse(localStorage.getItem("key")))
                     .then(data => {
                         console.log(data);
                         localStorage.setItem("key", JSON.stringify(data));
@@ -84,7 +87,7 @@ const Header = () => {
 
         const updateName = () => {
             if (checkUserExistence().userExists === true) {
-                getData('http://localhost:5000/keys/' + checkUserExistence().key)
+                getData(base_url + '/keys/' + checkUserExistence().key)
             .then(data => {
                 console.log(data);
                 localStorage.setItem("key", JSON.stringify(data));
@@ -101,15 +104,15 @@ const Header = () => {
             return (
                 <Navbar bg="primary" expand="lg">
                     <Container>
-                        <Navbar.Brand href="/">Thynkr</Navbar.Brand>
+                        <Navbar.Brand href="/"><Image src={logo} width="30"></Image>Thynkr</Navbar.Brand>
                         <Navbar.Collapse id="basic-navbar-nav">
                         <Nav>
-                            <Nav.Link href="/"><FontAwesomeIcon icon={faHouse} /> Home</Nav.Link>
-                            <Nav.Link href="/feed"><FontAwesomeIcon icon={faMessage} /> Feed</Nav.Link>
-                            <Nav.Link href="/login"><FontAwesomeIcon icon={faUser} /> Login</Nav.Link>
-                            <Nav.Link href="/signup"><FontAwesomeIcon icon={faUser} /> Signup</Nav.Link>
+                            <Nav.Link to="/" as={Link}><FontAwesomeIcon icon={faHouse} /> Home</Nav.Link>
+                            <Nav.Link to="/feed" as={Link}><FontAwesomeIcon icon={faMessage} /> Feed</Nav.Link>
+                            <Nav.Link to="/login" as={Link}><FontAwesomeIcon icon={faUser} /> Login</Nav.Link>
+                            <Nav.Link to="/signup" as={Link}><FontAwesomeIcon icon={faUser} /> Signup</Nav.Link>
                             <Nav.Link href="/flashcards"><FontAwesomeIcon icon={faBoltLightning} /> Flashcards</Nav.Link>
-                            <Nav.Link href="/planner"><FontAwesomeIcon icon={faCalendarCheck} /> Planner</Nav.Link>
+                            <Nav.Link to="/planner" as={Link}><FontAwesomeIcon icon={faCalendarCheck} /> Planner</Nav.Link>
                         </Nav>
                         </Navbar.Collapse>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -134,7 +137,7 @@ const Header = () => {
                                 {cue.userExists === true ? 
                                 <>
                                 <NavDropdown title={cue.username} id="basic-nav-dropdown">
-                                    <Link to={`/users/${cue.username}`}>
+                                    <Link to={`/users/${cue.username}`} as={Link}>
                                     <NavDropdown.Item href= {"/users/" + cue.username}><FontAwesomeIcon icon={faUser} /> Profile</NavDropdown.Item>
                                     </Link>
                                     <NavDropdown.Item onClick={handleLogout.bind()}><FontAwesomeIcon icon={faSignOutAlt} /> Logout</NavDropdown.Item>

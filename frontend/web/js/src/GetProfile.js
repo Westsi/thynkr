@@ -7,6 +7,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 import { Image } from 'react-bootstrap';
 import { checkUserExistence } from './Header';
+import { base_url } from './requestURL';
 
 
 const Profile = () => {
@@ -20,7 +21,7 @@ const Profile = () => {
     console.log(id);
 
     const makeServerRequest = () => {
-        getData('http://localhost:5000/users/' + id)
+        getData(base_url + '/users/' + id)
         .then(data => {
             console.log(data);
             setUserInfo(data);
@@ -29,7 +30,7 @@ const Profile = () => {
     };
 
     const getImage = () => {
-        return 'http://localhost:5000/users/pfp/' + userInfo.name;
+        return base_url + '/users/pfp/' + userInfo.name;
     };
 
     useEffect(() => {

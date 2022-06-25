@@ -8,6 +8,7 @@ import Card from 'react-bootstrap/Card';
 import { Image } from 'react-bootstrap';
 import { checkUserExistence } from './Header';
 import Form from 'react-bootstrap/Form';
+import { base_url } from './requestURL';
 
 
 const EditProfile = () => {
@@ -22,7 +23,7 @@ const EditProfile = () => {
     const cue = checkUserExistence();
 
     const makeUserRequest = () => {
-        getData('http://localhost:5000/users/' + cue.username)
+        getData(base_url + '/users/' + cue.username)
         .then(data => {
             setUserInfo(data);
             setIsLoading(false);
@@ -30,7 +31,7 @@ const EditProfile = () => {
     };
 
     const getImage = () => {
-        return 'http://localhost:5000/users/pfp/' + userInfo.name;
+        return base_url + '/users/pfp/' + userInfo.name;
     };
 
     const onSubmit = (e) => {
@@ -48,7 +49,7 @@ const EditProfile = () => {
                 setConfirmPassword(userInfo.password);
             }
             if (password == confirmPassword) {
-                patchData('http://localhost:5000/users/' + cue.username, {
+                patchData(base_url + '/users/' + cue.username, {
                     email: email,
                     password: password
                 })

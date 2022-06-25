@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import { postData } from './APIREQ';
 import Header from './Header';
+import { base_url } from './requestURL';
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ const Login = () => {
     const handleSubmit = async e => {
         e.preventDefault();
         const user = {email: email, password: password};
-        postData('http://localhost:5000/keys', user)
+        postData(base_url + '/keys', user)
         .then(data => {
             console.log(data);
             localStorage.setItem("key", JSON.stringify(data));

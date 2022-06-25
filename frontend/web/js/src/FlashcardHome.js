@@ -12,6 +12,7 @@ import Col from 'react-bootstrap/Col';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { base_url } from './requestURL';
 
 
 const FcHome = () => {
@@ -27,12 +28,12 @@ const FcHome = () => {
     let id = cue.username;
 
     const makeServerRequest = () => {
-        getData('http://localhost:5000/users/' + id)
+        getData(base_url + '/users/' + id)
         .then(data => {
             console.log(data);
             setSets(data);
     });
-        getData('http://localhost:5000/flashcards')
+        getData(base_url + '/flashcards')
         .then(data => {
             console.log(data);
             setSets(data);
@@ -70,7 +71,7 @@ const FcHome = () => {
                         <p>Click on a set to view it.</p>
                         <p>Click on the plus sign to create a new set.</p>
                         <Button variant="primary" onClick={() => setSetType(!setType)}>{setType == true ? 'Public ' : 'Private '}Sets</Button>
-                        <Button variant="primary" onClick={() => {newSet()}}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>Create Set</Button>
+                        <Button variant="primary" onClick={() => {newSet()}}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>Create Set NEED TO WRITE PAGE</Button>
                         <br />
                         <br />
                         <Row lg={4} md={3} sm={2} xs={1}>

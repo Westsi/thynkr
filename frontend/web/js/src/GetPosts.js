@@ -8,6 +8,7 @@ import Card from 'react-bootstrap/Card';
 import { Image } from 'react-bootstrap';
 import { checkUserExistence } from './Header';
 import Form from 'react-bootstrap/Form';
+import { base_url } from './requestURL';
 
 
 const Post = () => {
@@ -24,12 +25,12 @@ const Post = () => {
         const navigate = useNavigate();
     
         const getImage = () => {
-            return 'http://localhost:5000/users/pfp/' + postInfo.author;
+            return base_url + '/users/pfp/' + postInfo.author;
         };
     
         const makeServerRequest = () => {
             setIsLoading(true);
-            getData('http://localhost:5000/posts/' + id)
+            getData(base_url + '/posts/' + id)
             .then(data => {
                 console.log(data);
                 setPostInfo(data);
@@ -39,7 +40,7 @@ const Post = () => {
     
         const getComments = () => {
             setIsLoading(true);
-            getData('http://localhost:5000/comments')
+            getData(base_url + '/comments')
             .then(data => {
                 var temp = [];
                 for (let i = 0; i < data.length; i++) {
@@ -61,19 +62,16 @@ const Post = () => {
         }
     
         const handlePostDelete = () => {
-            deleteData('http://localhost:5000/posts/' + id)
+            deleteData(base_url + '/posts/' + id)
             .then(data => {
                 console.log(data);
-                for (let i = 0; i < comments.length; i++) {
-                    deleteData('http://localhost:5000/comments/' + comments[i].comment_id)
-                }
                 navigate('/feed');
                 
         });
         }
     
         const handleCommentDelete = (comment_id) => {
-            deleteData('http://localhost:5000/comments/' + comment_id)
+            deleteData(base_url + '/comments/' + comment_id)
             window.location.reload(true);
         }
     
@@ -84,7 +82,7 @@ const Post = () => {
                 key: cue.key
             }
             console.log(data);
-            postData('http://localhost:5000/comments', data)
+            postData(base_url + '/comments', data)
             .then(data => {
                 console.log(data);
         });
@@ -99,7 +97,7 @@ const Post = () => {
                 user_to_send_to: postInfo.author,
             }
             console.log(data);
-            postData('http://localhost:5000/notifs', data)
+            postData(base_url + '/notifs', data)
             .then(data => {
                 console.log(data);
                 window.location.reload();

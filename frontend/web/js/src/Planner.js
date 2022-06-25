@@ -10,6 +10,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { Table } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { base_url } from './requestURL';
 
 const MonthView = () => {
     const months = [
@@ -229,7 +230,7 @@ const Planner = () => {
                         console.log(startDate);
                         console.log(endDate);
 
-                        fetch('http://localhost:5000/planner', {
+                        fetch(base_url + '/planner', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'

@@ -7,6 +7,7 @@ import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 import { postData } from './APIREQ';
 import { checkUserExistence } from './Header';
+import { base_url } from './requestURL';
 
 const NewPost = () => {
 
@@ -19,7 +20,7 @@ const NewPost = () => {
     const onSubmit = (e) => {
         e.preventDefault();
         console.log(title, content);
-        postData("http://localhost:5000/posts", { title:title, content:content, key:cue.key })
+        postData(base_url + "/posts", { title:title, content:content, key:cue.key })
         .then(data => {
             console.log(data);
             navigate("/posts/" + data.post_id);

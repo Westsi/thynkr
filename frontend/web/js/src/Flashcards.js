@@ -6,6 +6,7 @@ import { getData } from './APIREQ';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 import { checkUserExistence } from './Header';
+import { base_url } from './requestURL';
 
 
 const Flashcards = () => {
@@ -21,7 +22,7 @@ const Flashcards = () => {
 
     const getSet = () => {
         if (cue.userExists === true) {
-            getData('http://localhost:5000/flashcards/' + id)
+            getData(base_url + '/flashcards/' + id)
                 .then(data => {
                     if (data.public === true) {
                         setFlashcards(data);

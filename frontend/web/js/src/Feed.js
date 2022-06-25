@@ -6,6 +6,7 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { base_url } from './requestURL';
 
 
 const FeedItem = () => {
@@ -14,7 +15,7 @@ const FeedItem = () => {
 
     const getPosts = () => {
         setIsLoading(true);
-        return fetch('http://localhost:5000/posts')
+        return fetch(base_url + '/posts')
         .then(res => res.json())
         .then(data => {
             console.log(data);

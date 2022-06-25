@@ -6,6 +6,7 @@ import { getData } from './APIREQ';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
 import { Image } from 'react-bootstrap';
+import { base_url } from './requestURL';
 
 
 const Search = () => {
@@ -18,7 +19,7 @@ const Search = () => {
     var allData = [];
     const makeServerRequests = () => {
         var amountDone = 0
-        getData('http://localhost:5000/posts')
+        getData(base_url + '/posts')
         .then(data => {
             allData.push(data);
             amountDone++;
@@ -27,7 +28,7 @@ const Search = () => {
             }
 
         });
-        getData('http://localhost:5000/users')
+        getData(base_url + '/users')
         .then(data => {
             allData.push(data);
             amountDone++;
@@ -36,7 +37,7 @@ const Search = () => {
             }
         });
 
-        getData('http://localhost:5000/comments')
+        getData(base_url + '/comments')
         .then(data => {
             allData.push(data);
             amountDone++;

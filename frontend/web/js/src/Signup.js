@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import { getData, postData } from './APIREQ';
 import Header from './Header';
+import { base_url } from './requestURL';
 
 const Signup = () => {
     const [state, setState] = useState({
@@ -34,7 +35,7 @@ const Signup = () => {
 
         if (state.password === state.confirmPassword) {
 
-            getData('http://localhost:5000/users')
+            getData(base_url + '/users')
             .then(data => {
                 console.log(data);
                 let userExists = false;
@@ -49,7 +50,7 @@ const Signup = () => {
                 if (userExists) {
                     alert("Email or Username already exists");
                 } else {
-                    postData('http://localhost:5000/users', {
+                    postData(base_url + '/users', {
                         email: state.email,
                         password: state.password,
                         name: state.username,
@@ -57,7 +58,7 @@ const Signup = () => {
                     .then(data => {
                         console.log(data);
                         alert("User created successfully");
-                        fetch('http://localhost:5000/users/pfp/' + data.name, {
+                        fetch(base_url + '/users/pfp/' + data.name, {
                             method: 'POST',
                             mode: 'cors',
                             cache: 'no-cache',

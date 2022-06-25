@@ -1,3 +1,9 @@
+To build run npm run build
+then serve -s build
+MAKE SURE TO DISABLE React Dev Tools during lighthouse checks!
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
