@@ -67,9 +67,9 @@ class EventResource(Resource):
             if 'description' in request.json:
                 event.description = request.json['description']
             if 'start_time' in request.json:
-                event.start_time = request.json['start_time']
+                event.start_time = datetime.fromtimestamp(int(request.json['start_time']) / 1000.0)
             if 'end_time' in request.json:
-                event.end_time = request.json['end_time']
+                event.end_time = datetime.fromtimestamp(int(request.json['end_time']) / 1000.0)
 
             db.session.commit()
         return event_schema.dump(event)

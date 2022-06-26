@@ -43,8 +43,24 @@ const DayView = (props) => {
     const getEvents = () => {
         getData(base_url + "/planner/" + checkUserExistence().key)
             .then(data => {
-                setEvents(data);
-                eventsOnDay();
+                console.log(data);
+                let eventsOnDay = [];
+                console.log("running eventsOnDay");
+                console.log(data.length);
+                console.log(data[0]);
+                console.log(data);
+                for (let i = 0; i < data.length; i++) {
+                    console.log("running eventsOnDay for loop");
+                    data[i].start_time = Date.parse(data[i].start_time);
+                    data[i].end_time = Date.parse(data[i].end_time);
+                    console.log(data[i].start_time);
+                    if (data[i].start_time.getDate() === day && data[i].start_time.getMonth() === month && data[i].start_time.getFullYear() === year) {
+                        eventsOnDay.push(data[i]);
+                    }
+                }
+                //console.log(eventsOnDay);
+                setEvents(eventsOnDay);
+                setLoading(false);
             }
             )
             .catch(err => {
@@ -54,14 +70,6 @@ const DayView = (props) => {
     }
 
     const eventsOnDay = () => {
-        let eventsOnDay = [];
-        for (let i = 0; i < events.length; i++) {
-            if (events[i].date.getDate() === day && events[i].date.getMonth() === month && events[i].date.getFullYear() === year) {
-                eventsOnDay.push(events[i]);
-            }
-        }
-        setEvents(eventsOnDay);
-        setLoading(false);
     }
 
     useEffect(() => {
@@ -115,9 +123,11 @@ const DayView = (props) => {
                     <tr>
                         {events.map((event, index) => {
                             return (
+                                <tr>
                                 <td key={index}>
                                     <Link to={"/planner/event/" + event.id}>{event.title}</Link>
                                 </td>
+                                </tr>
                             );
                         }
                         )}
