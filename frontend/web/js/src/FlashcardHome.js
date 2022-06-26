@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Button from 'react-bootstrap/Button';
 import { getData } from './APIREQ';
 import Spinner from 'react-bootstrap/Spinner';
 import Card from 'react-bootstrap/Card';
-import { Image } from 'react-bootstrap';
 import { checkUserExistence } from './Header';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -53,7 +52,7 @@ const FcHome = () => {
     }, []);
 
 
-    if (isLoading == true) {
+    if (isLoading === true) {
         return (
             <>
                 <Header />
@@ -70,14 +69,14 @@ const FcHome = () => {
                         <h1>{id}'s Sets</h1>
                         <p>Click on a set to view it.</p>
                         <p>Click on the plus sign to create a new set.</p>
-                        <Button variant="primary" onClick={() => setSetType(!setType)}>{setType == true ? 'Public ' : 'Private '}Sets</Button>
+                        <Button variant="primary" onClick={() => setSetType(!setType)}>{setType === true ? 'Public ' : 'Private '}Sets</Button>
                         <Button variant="primary" onClick={() => {newSet()}}><FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>Create Set NEED TO WRITE PAGE</Button>
                         <br />
                         <br />
                         <Row lg={4} md={3} sm={2} xs={1}>
-                            {setType == true ?
+                            {setType === true ?
                                 sets.map(set => {
-                                    if (set.owner == id) {
+                                    if (set.owner === id) {
                                         return (
                                             <Col className="d-flex">
                                             <Card className='flex-fill' style={{ width: '18rem' }}>

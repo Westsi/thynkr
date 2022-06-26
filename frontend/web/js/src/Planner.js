@@ -13,7 +13,7 @@ import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { base_url } from './requestURL';
 
 
-const DayView = () => {
+const DayView = (props) => {
     const months = [
         "January  ",
         "February ",
@@ -32,11 +32,25 @@ const DayView = () => {
     const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
 
     const [events, setEvents] = useState([]);
-    const [globalDate, setGlobalDate] = useState(new Date());
+    const [globalDate, setGlobalDate] = useState(props.initDate);
     const month = globalDate.getMonth();
     const year = globalDate.getFullYear();
     const day = globalDate.getDate();
     const dayOfWeek = globalDate.getDay();
+
+
+    useEffect(() => {
+        getData(base_url + "/planner/" + checkUserExistence().key)
+            .then(data => {
+                setEvents(data);
+            }
+            )
+            .catch(err => {
+                console.log(err);
+            }
+            );
+    }, []);
+    
 
     return (
         <>
@@ -83,7 +97,7 @@ const DayView = () => {
 };
 
 
-const MonthView = () => {
+const MonthView = (props) => {
     const months = [
         "January  ",
         "February ",
@@ -168,7 +182,6 @@ const MonthView = () => {
                             return <td key={index}>{day}</td>;
                         })}
                     </tr>
-
                     {days.map((day, index) => {
                         if (index % 7 === 5) {
                             // MAKE CLICK ON CELL RETURN VAL and create new event on that day - how
@@ -176,11 +189,10 @@ const MonthView = () => {
                             // use lighthouse to test and do everything possible to decrease load time
                             return (
                                 <tr key={index}>
-                                    {" "}
                                     {days.slice(index - 5, index + 2).map((day, index2) => {
                                         return (
                                             // how to change view to day view and pass date?
-                                            <td key={index2} onClick={() => { console.log(day); alert(day); }}>{day}</td>
+                                            <td key={index2} onClick={() => { const thing = new Date(globalDate); thing.setDate(day); props.onChange(thing);}}>{day}</td>
                                         );
                                     })}
                                 </tr>
@@ -206,8 +218,8 @@ const Planner = () => {
     const [eventEndDate, setEventEndDate] = useState();
     const [eventEndTime, setEventEndTime] = useState();
     const [showCreator, setShowCreator] = useState(false);
-    const [viewType, setViewType] = useState('Day');
-
+    const [viewType, setViewType] = useState('Month');
+    const [datePassThrough, setDatePassThrough] = useState(new Date());
 
 
     const navigate = useNavigate();
@@ -320,13 +332,13 @@ const Planner = () => {
             </Modal>
             <Header />
             <div className="container">
-                <h1 primary>Thynkr Planner</h1>
+                <h1 variant="primary">Thynkr Planner</h1>
                 <br />
                 <br />
                 <Button variant="primary" onClick={() => { setShowCreator(!showCreator) }}>Create an Event</Button>
                 {viewType === 'Month' ? <Button variant="primary" onClick={() => { setViewType('Day') }}>Day View</Button> : <Button variant="primary" onClick={() => { setViewType('Month') }}>Month View</Button>}
             </div>
-            {viewType === 'Day' ? <DayView /> : <MonthView />}
+            {viewType === 'Day' ? <DayView initDate={datePassThrough}/> : <MonthView onChange={(date) => {setViewType('Day'); setDatePassThrough(date);}}/>}
         </>
     )
 };

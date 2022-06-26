@@ -42,8 +42,8 @@ class EventListResource(Resource):
             name=request.json['name'],
             description=request.json['description'],
             user=key_info['user'],
-            start_time=datetime.fromtimestamp(int(request.json['start'])/1000.0),
-            end_time=datetime.fromtimestamp(int(request.json['end'])/1000.0)
+            start_time=datetime.fromtimestamp(int(request.json['start']) / 1000.0),
+            end_time=datetime.fromtimestamp(int(request.json['end']) / 1000.0)
         )
         db.session.add(new_event)
         db.session.commit()
@@ -83,3 +83,17 @@ class EventResource(Resource):
             db.session.commit()
             return '', 204
         abort(401)
+
+
+# getting events based on key
+class GetEventResource(Resource):
+    def get(self, key):
+        events = Event.query.all()
+        user_name = login_verifier_keys.Key.query.get_or_404(key)
+        user_name = login_verifier_keys.key_schema.dump(user_name)['user']
+        toReturn = []
+        for i in range(len(events)):
+            if events[i].user == user_name:
+                toReturn.append(events[i])
+
+        return events_schema.dump(toReturn)

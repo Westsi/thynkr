@@ -64,7 +64,7 @@ class NotifResource(Resource):
         return '', 204
 
 
-# getting notifs based on username
+# getting notifs based on key
 class GetNotifResource(Resource):
     def get(self, key):
         notifs = Notif.query.all()

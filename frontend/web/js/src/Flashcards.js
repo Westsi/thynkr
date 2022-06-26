@@ -57,7 +57,7 @@ const Flashcards = () => {
         document.title = "Flashcards on Thynkr";
     }, []);
 
-    if (isLoading == true) {
+    if (isLoading === true) {
         return (
             <>
                 <Header />
@@ -67,7 +67,7 @@ const Flashcards = () => {
             </>
         );
     }
-    else if (flashcards.length == 0) {
+    else if (flashcards.length === 0) {
         return (
             <>
                 <Header />

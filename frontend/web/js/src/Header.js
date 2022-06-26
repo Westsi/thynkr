@@ -11,7 +11,7 @@ import { Card } from 'react-bootstrap';
 import Image from 'react-bootstrap/Image';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignOutAlt, faHouse, faMessage, faBell, faBoltLightning, faCalendarCheck, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSignOutAlt, faHouse, faMessage, faBell, faBoltLightning, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
 import { getData, deleteData, postData } from './APIREQ';
 import logo from './images/logo.png';
 import { base_url } from './requestURL';
@@ -85,17 +85,6 @@ const Header = () => {
             }
         }
 
-        const updateName = () => {
-            if (checkUserExistence().userExists === true) {
-                getData(base_url + '/keys/' + checkUserExistence().key)
-            .then(data => {
-                console.log(data);
-                localStorage.setItem("key", JSON.stringify(data));
-            }
-            );
-            }
-        }
-
         const cue = checkUserExistence();
         useEffect(() => {
             checkKeyExpiration();
@@ -150,9 +139,9 @@ const Header = () => {
                                                 <Card key={notif.id}>
                                                     <Card.Body>
                                                         <Card.Title>
-                                                            {notif.notif_type == 'like'? 
+                                                            {notif.notif_type === 'like'? 
                                                         <><Link to={`/users/${notif.user_to_link}`}>{notif.user_to_link}</Link> liked your <Link to={`/posts/${notif.post_to_link}`}>post</Link>.</>:null}
-                                                        {notif.notif_type == 'comment'?
+                                                        {notif.notif_type === 'comment'?
                                                         <><Link to={`/users/${notif.user_to_link}`}>{notif.user_to_link}</Link> commented on your <Link to={`/posts/${notif.post_to_link}`}>post</Link>.</>:null}
                                                         </Card.Title>
                                                         <Card.Text>{new Date(notif.date_time).getDate()}/{new Date(notif.date_time).getMonth() + 1} at {new Date(notif.date_time).getHours()}:{new Date(notif.date_time).getMinutes()}</Card.Text>
