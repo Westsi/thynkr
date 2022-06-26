@@ -11,7 +11,7 @@ import { Card } from 'react-bootstrap';
 import Image from 'react-bootstrap/Image';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignOutAlt, faHouse, faMessage, faBell, faBoltLightning, faCalendarCheck } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faSignOutAlt, faHouse, faMessage, faBell, faBoltLightning, faCalendarCheck, faWindowRestore } from '@fortawesome/free-solid-svg-icons';
 import { getData, deleteData, postData } from './APIREQ';
 import logo from './images/logo.png';
 import { base_url } from './requestURL';

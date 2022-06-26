@@ -12,6 +12,87 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { base_url } from './requestURL';
 
+
+const DayView = () => {
+    const months = [
+        "January  ",
+        "February ",
+        "March    ",
+        "April    ",
+        "May      ",
+        "June     ",
+        "July     ",
+        "August   ",
+        "September",
+        "October  ",
+        "November ",
+        "December "
+    ];
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
+
+    const [events, setEvents] = useState([]);
+    const [globalDate, setGlobalDate] = useState(new Date());
+    const month = globalDate.getMonth();
+    const year = globalDate.getFullYear();
+    const day = globalDate.getDate();
+    const dayOfWeek = globalDate.getDay();
+
+    return (
+        <>
+            <Table striped bordered hover size="sm" variant="light">
+                <thead>
+                    <tr>
+                        <th>
+                            <Button
+                                variant="info"
+                                onClick={() => {
+                                    const newDate = new Date();
+                                    newDate.setDate(globalDate.getDate() - 1);
+                                    newDate.setMonth(globalDate.getMonth());
+                                    newDate.setFullYear(globalDate.getFullYear());
+                                    if (globalDate.getDate() <= 1) {
+                                        newDate.setMonth(globalDate.getMonth() - 1);
+                                        newDate.setDate(daysInMonth[newDate.getMonth()]);
+                                    }
+                                    setGlobalDate(newDate); 
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faAngleLeft} />
+                            </Button>
+                        </th>
+                        <th width="50%">{daysOfWeek[dayOfWeek]} {day} {months[month]} {year}/ {globalDate.toDateString()}</th>
+                        <th>
+                            <Button
+                                variant="info"
+                                onClick={() => {
+                                    const newDate = new Date();
+                                    newDate.setDate(globalDate.getDate() + 1);
+                                    newDate.setMonth(globalDate.getMonth());
+                                    newDate.setFullYear(globalDate.getFullYear());
+                                    if (globalDate.getDate() >= daysInMonth[globalDate.getMonth()]) {
+                                        newDate.setMonth(globalDate.getMonth() + 1);
+                                        newDate.setDate(1);
+                                    }
+                                    setGlobalDate(newDate);
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faAngleRight} />
+                            </Button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+
+                    </tr>
+                </tbody>
+            </Table>
+        </>
+    );
+};
+
+
 const MonthView = () => {
     const months = [
         "January  ",
@@ -68,9 +149,12 @@ const MonthView = () => {
                                 onClick={() => {
                                     const newDate = new Date();
                                     newDate.setMonth(globalDate.getMonth() - 1);
-                                    if (globalDate.getMonth() < 1) {
-                                        newDate.setMonth(11);
+                                    if (globalDate.getFullYear() !== newDate.getFullYear()) {
+                                        newDate.setFullYear(globalDate.getFullYear());
+                                    }
+                                    if (globalDate.getMonth() <= 0) {
                                         newDate.setFullYear(globalDate.getFullYear() - 1);
+                                        newDate.setMonth(11);
                                     }
                                     setGlobalDate(newDate);
                                 }}
@@ -78,16 +162,19 @@ const MonthView = () => {
                                 <FontAwesomeIcon icon={faAngleLeft} />
                             </Button>
                         </th>
-                        <th width={200}>{months[month]}</th>
+                        <th width="50%">{months[month]} {year}</th>
                         <th>
                             <Button
                                 variant="info"
                                 onClick={() => {
                                     const newDate = new Date();
                                     newDate.setMonth(globalDate.getMonth() + 1);
+                                    if (globalDate.getFullYear() !== newDate.getFullYear()) {
+                                        newDate.setFullYear(globalDate.getFullYear());
+                                    }
                                     if (globalDate.getMonth() >= 11) {
-                                        newDate.setMonth(0);
                                         newDate.setFullYear(globalDate.getFullYear() + 1);
+                                        newDate.setMonth(0);
                                     }
                                     setGlobalDate(newDate);
                                 }}
@@ -116,7 +203,7 @@ const MonthView = () => {
                                     {" "}
                                     {days.slice(index - 5, index + 2).map((day, index2) => {
                                         return (
-                                            <td key={index2} onClick={() => {console.log(day); alert(day)}}>{day}</td>
+                                            <td key={index2} onClick={() => { console.log(day); alert(day) }}>{day}</td>
                                         );
                                     })}
                                 </tr>
@@ -133,7 +220,6 @@ const MonthView = () => {
 
 
 const Planner = () => {
-    const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(false);
     const [eventName, setEventName] = useState('');
     const [eventDescription, setEventDescription] = useState('');
@@ -260,7 +346,7 @@ const Planner = () => {
                 <br />
                 <Button variant="primary" onClick={() => { setShowCreator(!showCreator) }}>Create an Event</Button>
             </div>
-            <MonthView />
+            <DayView />
         </>
     )
 };
