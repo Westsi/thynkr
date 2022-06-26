@@ -47,34 +47,24 @@ const DayView = () => {
                             <Button
                                 variant="info"
                                 onClick={() => {
-                                    const newDate = new Date();
-                                    newDate.setDate(globalDate.getDate() - 1);
-                                    newDate.setMonth(globalDate.getMonth());
-                                    newDate.setFullYear(globalDate.getFullYear());
-                                    if (globalDate.getDate() <= 1) {
-                                        newDate.setMonth(globalDate.getMonth() - 1);
-                                        newDate.setDate(daysInMonth[newDate.getMonth()]);
-                                    }
-                                    setGlobalDate(newDate); 
+                                    //from stackoverflow
+                                    const newDate = new Date(globalDate); // starting point!
+                                    newDate.setDate(globalDate.getDate() - 1);  // month overflow happens automatically!
+                                    setGlobalDate(newDate); // That's it!
                                 }}
                             >
                                 <FontAwesomeIcon icon={faAngleLeft} />
                             </Button>
                         </th>
-                        <th width="50%">{daysOfWeek[dayOfWeek]} {day} {months[month]} {year}/ {globalDate.toDateString()}</th>
+                        <th width="40%">{daysOfWeek[dayOfWeek]} {day} {months[month]} {year}/ {globalDate.toDateString()}</th>
                         <th>
                             <Button
                                 variant="info"
                                 onClick={() => {
-                                    const newDate = new Date();
-                                    newDate.setDate(globalDate.getDate() + 1);
-                                    newDate.setMonth(globalDate.getMonth());
-                                    newDate.setFullYear(globalDate.getFullYear());
-                                    if (globalDate.getDate() >= daysInMonth[globalDate.getMonth()]) {
-                                        newDate.setMonth(globalDate.getMonth() + 1);
-                                        newDate.setDate(1);
-                                    }
-                                    setGlobalDate(newDate);
+                                    //from stackoverflow
+                                    const newDate = new Date(globalDate); // starting point!
+                                    newDate.setDate(globalDate.getDate() + 1);  // month overflow happens automatically!
+                                    setGlobalDate(newDate); // That's it!
                                 }}
                             >
                                 <FontAwesomeIcon icon={faAngleRight} />
@@ -147,36 +137,22 @@ const MonthView = () => {
                             <Button
                                 variant="info"
                                 onClick={() => {
-                                    const newDate = new Date();
-                                    newDate.setMonth(globalDate.getMonth() - 1);
-                                    if (globalDate.getFullYear() !== newDate.getFullYear()) {
-                                        newDate.setFullYear(globalDate.getFullYear());
-                                    }
-                                    if (globalDate.getMonth() <= 0) {
-                                        newDate.setFullYear(globalDate.getFullYear() - 1);
-                                        newDate.setMonth(11);
-                                    }
-                                    setGlobalDate(newDate);
+                                    const newDate = new Date(globalDate); // starting point!
+                                    newDate.setMonth(globalDate.getMonth() - 1);  // month overflow happens automatically!
+                                    setGlobalDate(newDate); // That's it!
                                 }}
                             >
                                 <FontAwesomeIcon icon={faAngleLeft} />
                             </Button>
                         </th>
-                        <th width="50%">{months[month]} {year}</th>
+                        <th width="30%">{months[month]} {year}</th>
                         <th>
                             <Button
                                 variant="info"
                                 onClick={() => {
-                                    const newDate = new Date();
-                                    newDate.setMonth(globalDate.getMonth() + 1);
-                                    if (globalDate.getFullYear() !== newDate.getFullYear()) {
-                                        newDate.setFullYear(globalDate.getFullYear());
-                                    }
-                                    if (globalDate.getMonth() >= 11) {
-                                        newDate.setFullYear(globalDate.getFullYear() + 1);
-                                        newDate.setMonth(0);
-                                    }
-                                    setGlobalDate(newDate);
+                                    const newDate = new Date(globalDate); // starting point!
+                                    newDate.setMonth(globalDate.getMonth() + 1);  // month overflow happens automatically!
+                                    setGlobalDate(newDate); // That's it!
                                 }}
                             >
                                 <FontAwesomeIcon icon={faAngleRight} />
@@ -203,7 +179,8 @@ const MonthView = () => {
                                     {" "}
                                     {days.slice(index - 5, index + 2).map((day, index2) => {
                                         return (
-                                            <td key={index2} onClick={() => { console.log(day); alert(day) }}>{day}</td>
+                                            // how to change view to day view and pass date?
+                                            <td key={index2} onClick={() => { console.log(day); alert(day); }}>{day}</td>
                                         );
                                     })}
                                 </tr>
@@ -229,6 +206,7 @@ const Planner = () => {
     const [eventEndDate, setEventEndDate] = useState();
     const [eventEndTime, setEventEndTime] = useState();
     const [showCreator, setShowCreator] = useState(false);
+    const [viewType, setViewType] = useState('Day');
 
 
 
@@ -342,11 +320,13 @@ const Planner = () => {
             </Modal>
             <Header />
             <div className="container">
+                <h1 primary>Thynkr Planner</h1>
                 <br />
                 <br />
                 <Button variant="primary" onClick={() => { setShowCreator(!showCreator) }}>Create an Event</Button>
+                {viewType === 'Month' ? <Button variant="primary" onClick={() => { setViewType('Day') }}>Day View</Button> : <Button variant="primary" onClick={() => { setViewType('Month') }}>Month View</Button>}
             </div>
-            <DayView />
+            {viewType === 'Day' ? <DayView /> : <MonthView />}
         </>
     )
 };
