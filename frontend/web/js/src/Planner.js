@@ -33,25 +33,50 @@ const DayView = (props) => {
 
     const [events, setEvents] = useState([]);
     const [globalDate, setGlobalDate] = useState(props.initDate);
+    const [loading, setLoading] = useState(true);
     const month = globalDate.getMonth();
     const year = globalDate.getFullYear();
     const day = globalDate.getDate();
     const dayOfWeek = globalDate.getDay();
 
 
-    useEffect(() => {
+    const getEvents = () => {
         getData(base_url + "/planner/" + checkUserExistence().key)
             .then(data => {
                 setEvents(data);
+                eventsOnDay();
             }
             )
             .catch(err => {
                 console.log(err);
             }
             );
-    }, []);
-    
+    }
 
+    const eventsOnDay = () => {
+        let eventsOnDay = [];
+        for (let i = 0; i < events.length; i++) {
+            if (events[i].date.getDate() === day && events[i].date.getMonth() === month && events[i].date.getFullYear() === year) {
+                eventsOnDay.push(events[i]);
+            }
+        }
+        setEvents(eventsOnDay);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        getEvents();
+    }, []);
+
+    if (loading) {
+        return (
+            <>
+            <h1>Loading events...</h1>
+                <Spinner animation="border" variant="secondary" />
+            </>
+        );
+    }
+    else {
     return (
         <>
             <Table striped bordered hover size="sm" variant="light">
@@ -88,12 +113,20 @@ const DayView = (props) => {
                 </thead>
                 <tbody>
                     <tr>
-
+                        {events.map((event, index) => {
+                            return (
+                                <td key={index}>
+                                    <Link to={"/planner/event/" + event.id}>{event.title}</Link>
+                                </td>
+                            );
+                        }
+                        )}
                     </tr>
                 </tbody>
             </Table>
         </>
     );
+                            }
 };
 
 
