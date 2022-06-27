@@ -1,0 +1,1 @@
+use foreign keys on database for user etc instead of accessing then indexes - maybe faster?
