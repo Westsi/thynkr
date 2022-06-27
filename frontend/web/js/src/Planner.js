@@ -39,27 +39,10 @@ const DayView = (props) => {
     const day = globalDate.getDate();
     const dayOfWeek = globalDate.getDay();
 
-
     const getEvents = () => {
         getData(base_url + "/planner/" + checkUserExistence().key)
             .then(data => {
-                console.log(data);
-                let eventsOnDay = [];
-                console.log("running eventsOnDay");
-                console.log(data.length);
-                console.log(data[0]);
-                console.log(data);
-                for (let i = 0; i < data.length; i++) {
-                    console.log("running eventsOnDay for loop");
-                    data[i].start_time = Date.parse(data[i].start_time);
-                    data[i].end_time = Date.parse(data[i].end_time);
-                    console.log(data[i].start_time);
-                    if (data[i].start_time.getDate() === day && data[i].start_time.getMonth() === month && data[i].start_time.getFullYear() === year) {
-                        eventsOnDay.push(data[i]);
-                    }
-                }
-                //console.log(eventsOnDay);
-                setEvents(eventsOnDay);
+                setEvents(data);
                 setLoading(false);
             }
             )
@@ -69,74 +52,96 @@ const DayView = (props) => {
             );
     }
 
-    const eventsOnDay = () => {
+    const getEventsToMap = () => {
+        const data = events;
+        let eventsOnDay = [];
+        for (let i = 0; i < data.length; i++) {
+            data[i].start_time = new Date(data[i].start_time);
+            data[i].end_time = new Date(data[i].end_time);
+            if (data[i].start_time.getDate() === day && data[i].start_time.getMonth() === month && data[i].start_time.getFullYear() === year) {
+                eventsOnDay.push(data[i]);
+            }
+        }
+        eventsOnDay.sort((a, b) => {
+            return a.start_time - b.start_time;
+        }
+        );
+        return eventsOnDay;
     }
+
+    const eventsOnDay = getEventsToMap();
 
     useEffect(() => {
         getEvents();
-    }, []);
+    }
+        , []);
 
     if (loading) {
         return (
             <>
-            <h1>Loading events...</h1>
+                <h1>Loading events...</h1>
                 <Spinner animation="border" variant="secondary" />
             </>
         );
     }
     else {
-    return (
-        <>
-            <Table striped bordered hover size="sm" variant="light">
-                <thead>
-                    <tr>
-                        <th>
-                            <Button
-                                variant="info"
-                                onClick={() => {
-                                    //from stackoverflow
-                                    const newDate = new Date(globalDate); // starting point!
-                                    newDate.setDate(globalDate.getDate() - 1);  // month overflow happens automatically!
-                                    setGlobalDate(newDate); // That's it!
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faAngleLeft} />
-                            </Button>
-                        </th>
-                        <th width="40%">{daysOfWeek[dayOfWeek]} {day} {months[month]} {year}/ {globalDate.toDateString()}</th>
-                        <th>
-                            <Button
-                                variant="info"
-                                onClick={() => {
-                                    //from stackoverflow
-                                    const newDate = new Date(globalDate); // starting point!
-                                    newDate.setDate(globalDate.getDate() + 1);  // month overflow happens automatically!
-                                    setGlobalDate(newDate); // That's it!
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faAngleRight} />
-                            </Button>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        {events.map((event, index) => {
+        return (
+            <>
+                <Table striped bordered hover size="sm" variant="light">
+                    <thead>
+                        <tr>
+                            <th>
+                                <Button
+                                    variant="info"
+                                    onClick={() => {
+                                        //from stackoverflow
+                                        const newDate = new Date(globalDate); // starting point!
+                                        newDate.setDate(globalDate.getDate() - 1);  // month overflow happens automatically!
+                                        setGlobalDate(newDate); // That's it!
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faAngleLeft} />
+                                </Button>
+                            </th>
+                            <th width="40%">{daysOfWeek[dayOfWeek]} {day} {months[month]} {year}/ {globalDate.toDateString()}</th>
+                            <th>
+                                <Button
+                                    variant="info"
+                                    onClick={() => {
+                                        //from stackoverflow
+                                        const newDate = new Date(globalDate); // starting point!
+                                        newDate.setDate(globalDate.getDate() + 1);  // month overflow happens automatically!
+                                        setGlobalDate(newDate); // That's it!
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faAngleRight} />
+                                </Button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Starts at</td>
+                            <td>Ends at</td>
+                            <td>Name</td>
+                        </tr>
+                        {eventsOnDay.map((event, index) => {
                             return (
                                 <tr>
-                                <td key={index}>
-                                    <Link to={"/planner/event/" + event.id}>{event.title}</Link>
-                                </td>
+                                    <td>{event.start_time.toLocaleTimeString()}</td>
+                                    <td>{event.end_time.toLocaleTimeString()}</td>
+                                    <td key={index}>
+                                        <Link to={"/planner/event/" + event.id}>{event.name}</Link>
+                                    </td>
                                 </tr>
                             );
                         }
                         )}
-                    </tr>
-                </tbody>
-            </Table>
-        </>
-    );
-                            }
+                    </tbody>
+                </Table>
+            </>
+        );
+    }
 };
 
 
@@ -235,7 +240,7 @@ const MonthView = (props) => {
                                     {days.slice(index - 5, index + 2).map((day, index2) => {
                                         return (
                                             // how to change view to day view and pass date?
-                                            <td key={index2} onClick={() => { const thing = new Date(globalDate); thing.setDate(day); props.onChange(thing);}}>{day}</td>
+                                            <td key={index2} onClick={() => { const thing = new Date(globalDate); thing.setDate(day); props.onChange(thing); } }>{day}</td>
                                         );
                                     })}
                                 </tr>
@@ -381,7 +386,7 @@ const Planner = () => {
                 <Button variant="primary" onClick={() => { setShowCreator(!showCreator) }}>Create an Event</Button>
                 {viewType === 'Month' ? <Button variant="primary" onClick={() => { setViewType('Day') }}>Day View</Button> : <Button variant="primary" onClick={() => { setViewType('Month') }}>Month View</Button>}
             </div>
-            {viewType === 'Day' ? <DayView initDate={datePassThrough}/> : <MonthView onChange={(date) => {setViewType('Day'); setDatePassThrough(date);}}/>}
+            {viewType === 'Day' ? <DayView initDate={datePassThrough} /> : <MonthView onChange={(date) => { setViewType('Day'); setDatePassThrough(date); }} />}
         </>
     )
 };
