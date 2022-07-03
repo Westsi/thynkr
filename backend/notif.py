@@ -13,7 +13,7 @@ class Notif(db.Model):
     date_time = db.Column(db.DateTime)
     user_to_link = db.Column(db.String(50))
     post_to_link = db.Column(db.String(50))
-    notif_type = db.Column(db.String(50))  # notif_type can be like or comment right now
+    notif_type = db.Column(db.String(50))  # notif_type can be like or comment or event right now
 
     # any value can be entered but frontend only parses like and comment
 

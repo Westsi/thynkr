@@ -2,7 +2,6 @@ from flask import request
 from flask_restful import Resource, abort
 from datetime import datetime
 from db import db, ma
-import comment
 import login_verifier_keys
 
 

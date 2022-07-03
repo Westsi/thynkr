@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -28,7 +28,6 @@ const DayView = (props) => {
         "November ",
         "December "
     ];
-    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
 
     const [events, setEvents] = useState([]);
@@ -103,7 +102,7 @@ const DayView = (props) => {
                                     <FontAwesomeIcon icon={faAngleLeft} />
                                 </Button>
                             </th>
-                            <th width="40%">{daysOfWeek[dayOfWeek]} {day} {months[month]} {year}/ {globalDate.toDateString()}</th>
+                            <th width="40%">{daysOfWeek[dayOfWeek]} {day} {months[month]} {year}</th>
                             <th>
                                 <Button
                                     variant="info"
@@ -160,20 +159,13 @@ const MonthView = (props) => {
         "November ",
         "December "
     ];
-    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
-
-    const [events, setEvents] = useState([]);
     const [globalDate, setGlobalDate] = useState(new Date());
     const month = globalDate.getMonth();
     const year = globalDate.getFullYear();
-    const day = globalDate.getDate();
-    const dayOfWeek = globalDate.getDay();
-    const firstDayOfMonthDay = daysOfWeek[new Date(year, month, 1).getDay()];
     const firstDayOfMonth = new Date(year, month, 1).getDay();
     const lastDayOfMonth = new Date(year, month + 1, 0).getDay();
     const lastDayOfMonthNumber = new Date(year, month + 1, 0).getDate();
-    const firstDayOfMonthNumber = new Date(year, month, 1).getDate();
     const days = (() => {
         let daysArr = [];
         for (let i = 0; i < firstDayOfMonth; i++) {
@@ -240,7 +232,7 @@ const MonthView = (props) => {
                                     {days.slice(index - 5, index + 2).map((day, index2) => {
                                         return (
                                             // how to change view to day view and pass date?
-                                            <td key={index2} onClick={() => { const thing = new Date(globalDate); thing.setDate(day); props.onChange(thing); } }>{day}</td>
+                                            <td key={index2} onClick={() => { const thing = new Date(globalDate); thing.setDate(day); props.onChange(thing); }}>{day}</td>
                                         );
                                     })}
                                 </tr>
@@ -340,7 +332,6 @@ const Planner = () => {
                         startDate.setMonth(eventStartDate.split('-')[1] - 1);
                         startDate.setFullYear(eventStartDate.split('-')[0]);
                         startDate.setSeconds(0);
-                        startDate = startDate.getTime();
 
                         var endDate = new Date();
                         endDate.setMinutes(eventEndTime.split(':')[1]);
@@ -350,6 +341,12 @@ const Planner = () => {
                         endDate.setFullYear(eventEndDate.split('-')[0]);
                         endDate.setSeconds(0);
                         endDate = endDate.getTime();
+
+                        var notifSendTime = new Date(startDate);
+                        notifSendTime.setMinutes(notifSendTime.getMinutes() - 15);
+                        notifSendTime = notifSendTime.getTime();
+
+                        startDate = startDate.getTime();
 
                         console.log(startDate);
                         console.log(endDate);
@@ -365,14 +362,28 @@ const Planner = () => {
                                 start: startDate,
                                 location: eventLocation,
                                 end: endDate,
-                                key: checkUserExistence().key
+                                key: checkUserExistence().key,
                             })
                         })
                             .then(res => res.json())
                             .then(data => {
                                 console.log(data);
                                 setShowCreator(!showCreator);
-                            })
+                                fetch(base_url + '/enotif', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        key: checkUserExistence().key,
+                                        time_to_send_notif: notifSendTime,
+                                        id: data.id
+
+                                    })
+                                }
+                                )
+                            }
+                            )
                     }}>
                         Create
                     </Button>

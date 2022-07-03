@@ -55,14 +55,43 @@ const Header = () => {
             });
         }
 
+        const enotifRead = (id) => {
+            deleteData(base_url + '/enotif/' + id)
+            .then(data => {
+                console.log(data);
+                window.location.reload();
+            });
+        }
+
         const getNotifications = () => {
             if (checkUserExistence().userExists === true) {
                 getData(base_url + '/notifs/' + checkUserExistence().key)
             .then(data => {
+                console.log("data" + data);
                 console.log(data);
-                setNotifs(data.reverse());
+                getENotifications(data);
             }
             );
+            }
+            
+        };
+
+
+        const getENotifications = (pd) => {
+            if (checkUserExistence().userExists === true) {
+                getData(base_url + '/enotif/' + checkUserExistence().key)
+                .then(data => {
+                    console.log(data);
+                    // fix notifs
+                    console.log(pd);
+                    var eNotifs = pd;
+                    console.log(eNotifs);
+                    for (var i = 0; i < data.length; i++) {
+                        eNotifs.push(data[i]);
+                    }
+                    setNotifs(eNotifs.reverse());
+                }
+                );
             }
             
         };
@@ -135,6 +164,19 @@ const Header = () => {
                                 {notifs.length > 0 ? <NavDropdown title={<FontAwesomeIcon icon={faBell} shake />} id="basic-nav-dropdown">
                                     {
                                     notifs.map(notif => {
+                                        if (notif.time_to_send){
+                                            notif.time_to_send = new Date(notif.time_to_send);
+                                            return(
+                                                <Card key={notif.id}>
+                                                    <Card.Body>
+                                                        <Card.Title>
+                                                        Your <Link to={`/planner/event/${notif.event_id}`}>event</Link> is in 15 minutes!
+                                                        </Card.Title>
+                                                        <Button variant="outline-success" onClick={() => enotifRead(notif.id)}>Mark as read</Button>
+                                                    </Card.Body>
+                                                </Card>
+                                            )
+                                        }
                                             return ( 
                                                 <Card key={notif.id}>
                                                     <Card.Body>

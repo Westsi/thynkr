@@ -13,6 +13,7 @@ const EditProfile = React.lazy(() => import('./EditProfile'));
 const Flashcards = React.lazy(() => import('./Flashcards'));
 const FcHome = React.lazy(() => import('./FlashcardHome'));
 const Planner = React.lazy(() => import('./Planner'));
+const Event = React.lazy(() => import('./GetEvent'));
 
 const App = () => {
     return (
@@ -55,6 +56,9 @@ const App = () => {
             </React.Suspense>} />
             <Route path="/planner" element={<React.Suspense fallback={<>...</>}>
               <Planner />
+            </React.Suspense>} />
+            <Route path="/planner/event/:id" element={<React.Suspense fallback={<>...</>}>
+              <Event />
             </React.Suspense>} />
         </Routes>
     );

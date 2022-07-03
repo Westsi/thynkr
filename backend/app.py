@@ -29,6 +29,7 @@ from user import UserListResource, UserResource, UserPFPResource
 from flashcards import FlashCards, FlashCardsAll
 from login_verifier_keys import KeyListResource, KeyResource
 from planner import EventListResource, EventResource, GetEventResource
+from event_notif import EventNotifResource, GetEventNotifResource, thing
 
 
 api.add_resource(CommentListResource, '/comments')
@@ -54,6 +55,10 @@ api.add_resource(KeyResource, '/keys/<string:key>')
 api.add_resource(EventListResource, '/planner')
 api.add_resource(EventResource, '/planner/<int:event_id>') # NEED to make sure no two endpoints have the same second slash datatype
 api.add_resource(GetEventResource, '/planner/<string:key>')
+
+api.add_resource(EventNotifResource, '/enotif/<int:event_notif_id>')
+api.add_resource(GetEventNotifResource, '/enotif/<string:key>')
+api.add_resource(thing, '/enotif')
 
 @app.after_request
 def after_request(response):

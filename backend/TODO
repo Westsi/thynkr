@@ -1,1 +1,3 @@
 use foreign keys on database for user etc instead of accessing then indexes - maybe faster?
+test ddos performance - endpoint http://localhost:5000/posts
+^ looks pretty good :)
