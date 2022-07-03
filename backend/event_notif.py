@@ -26,6 +26,7 @@ class EventNotifSchema(ma.Schema):
 event_notif_schema = EventNotifSchema()
 event_notifs_schema = EventNotifSchema(many=True)
 
+
 class thing(Resource):
     def get(self):
         users = EventNotif.query.all()
@@ -43,6 +44,7 @@ class thing(Resource):
         db.session.add(new_event_notif)
         db.session.commit()
         return event_notif_schema.dump(new_event_notif)
+
 
 # do CRUD operations on single event notifs just delete because get is in diff func to get based on username rather
 # than id
