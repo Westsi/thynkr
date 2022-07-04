@@ -124,8 +124,8 @@ TODO
 <!-- ROADMAP -->
 ## Roadmap
 
-- [-] Finish up Planner
-- [-] Improve security
+- [x] Finish up Planner
+- [x] Improve security
 - [ ] Add third-party login auth
 - [ ] Add file storage functionality
     - [ ] Taking and storing notes
